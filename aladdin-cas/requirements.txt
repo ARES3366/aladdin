@@ -1,0 +1,9 @@
+tornado
+requests
+cx_freeze==6.0b1
+configparser
+xpinyin
+jieba
+#numpy
+scipy
+protobuf

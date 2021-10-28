@@ -1,0 +1,498 @@
+MY_OS_FULL = "CentOS7.4_All_x64"
+MY_PACKAGE_NAME = ""
+MY_PACKAGE_PATH = ""
+MY_JOB_NAME  = ""
+FTP_BRANCH_TYPE = ""
+FTP_PUT_PKG = ""
+FTP_PKG_DIR = ""
+
+def version() {
+    return sh(script: 'git rev-parse --short HEAD', returnStdout: true)[0 .. 6]
+}
+
+
+def checkoutCode() {
+    stage 'checkout code'
+    script {
+        if (BRANCH_NAME.contains(" ")) {
+            echo "Branch name ${BRANCH_NAME} with blank space is invalid."
+            sh "exit 1"
+        }
+    }
+
+    sh "pwd && rm -rf ./${BRANCH_NAME}* && ls -a"
+    echo 'checkout aladdin-cas'
+    echo "current branch: $BRANCH_NAME"
+    checkout(
+        [
+        $class : 'GitSCM',
+        branches: scm.branches,
+        doGenerateSubmoduleConfigurations: false,
+        extensions: [
+            [
+            $class: 'RelativeTargetDirectory',
+            relativeTargetDir: "./${BRANCH_NAME}/aladdin-cas"
+            ]
+        ],
+        submoduleCfg: [],
+        userRemoteConfigs: [
+            [
+            credentialsId: '5d59cd15-9716-4597-b858-6b28996e702c',
+            url: 'git@gitlab.aishu.cn:aladdin/content-analysis/aladdin-cas.git'
+            ]
+        ]
+        ])
+
+    dir("${BRANCH_NAME}/aladdin-cas") {
+        MY_G_VERSION = version()
+    }
+}
+
+
+def globalValues() {
+    echo 'job name'
+    def job_name_parts = env.JOB_NAME.tokenize('/') as String[]
+    MY_JOB_NAME = job_name_parts[0]
+    echo "${MY_JOB_NAME}"
+
+    echo 'package path name'
+    MY_PACKAGE_PATH = "$WORKSPACE/${BRANCH_NAME}/aladdin-cas"
+    echo "${MY_PACKAGE_PATH}"
+
+    echo 'pacakge name'
+    MY_PACKAGE_NAME = "${MY_JOB_NAME}-$MY_OS_FULL-${new Date().format('yyyyMMdd-HHmmss')}-$MY_G_VERSION@${BRANCH_NAME}-${env.BUILD_NUMBER}"
+    echo "${MY_PACKAGE_NAME}"
+
+    echo 'ftp branch type'
+    if (BRANCH_NAME =~ "^Release.*") {
+        FTP_BRANCH_TYPE = "Release"
+    } else if (BRANCH_NAME =~ "^Feature.*") {
+        FTP_BRANCH_TYPE = "Feature"
+    } else {
+        FTP_BRANCH_TYPE = "develop"
+    }
+    echo "${FTP_BRANCH_TYPE}"
+
+    echo 'ftp put package cmd'
+    FTP_PKG_DIR= "/${FTP_BRANCH_TYPE}/module/ServerPacket/${MY_OS_FULL}/${MY_JOB_NAME}"
+    FTP_PUT_PKG = "${MY_PACKAGE_NAME}.tar.gz ${FTP_PKG_DIR}/${MY_PACKAGE_NAME}.tar.gz"
+    echo "${FTP_PKG_DIR}"
+    echo "${FTP_PUT_PKG}"
+}
+
+
+
+def checkCodeStyle() {
+    dir("${BRANCH_NAME}/aladdin-cas") {
+        try{
+            sh 'PYTHONPATH=$WORKSPACE/${BRANCH_NAME}/aladdin-cas/src pylint --output-format=parseable --reports=no --ignore=src/zhtools --disable=import-error,no-name-in-module,no-member,missing-docstring src > pylint.out || exit 0'
+        }
+        finally{
+            step([
+                $class: 'WarningsPublisher',
+                parserConfigurations: [[
+                    parserName: 'PYLint',
+                    pattern: 'pylint.out'
+                ]],
+                unstableTotalAll: '20',
+                usePreviousBuildAsReference: true
+            ])
+        }
+    }
+}
+
+def initServer(){
+    dir("${BRANCH_NAME}/aladdin-cas") {
+        sh 'python3 init/start_init_server.py'
+    }
+}
+
+def unitTest(){
+    dir("${BRANCH_NAME}/aladdin-cas") {
+	    sh 'cd unit_test && tar -xzf testdata.tgz'
+	    sh 'nohup python3 src/server.py &'
+	    sh 'ps aux|grep python3'
+        sh 'sleep 120'
+	    sh 'PYTHONPATH=$WORKSPACE/${BRANCH_NAME}/aladdin-cas/src python3 setup.py test'
+	    sh 'pkill -9 python3'
+	    xunit(
+	      thresholds: [
+		failed(
+		  unstableThreshold: '0'
+		)
+	      ],
+	      tools: [
+		JUnit(
+		  deleteOutputFiles: true,
+		  failIfNotNew: true,
+		  pattern: 'nose2-junit.xml',
+		  skipNoTestFiles: true,
+		  stopProcessingIfError: true
+		)
+	      ]
+	    )
+	    cobertura(
+	      autoUpdateHealth: false,
+	      autoUpdateStability: false,
+	      coberturaReportFile: 'coverage.xml',
+	      failUnhealthy: false,
+	      failUnstable: false,
+	      maxNumberOfBuilds: 0,
+	      onlyStable: false,
+	      sourceEncoding: 'UTF_8',
+	      zoomCoverageChart: false,
+	    )
+	    publishCoverage(
+	      adapters: [
+		coberturaAdapter(
+		  path: 'coverage.xml',
+		)
+	      ],
+	      sourceFileResolver: [
+		level: 'STORE_ALL_BUILD'
+	      ]
+	    )
+    }
+}
+
+def SecurityCheck(){
+    withDockerContainer(args: "-v ${WORKSPACE}/${BRANCH_NAME}/aladdin-cas:/aladdin-cas", image: "acr.aishu.cn/ict/cobra:latest") {
+        sh "python /code/cobra.py -t /aladdin-cas/src -f xml -o /aladdin-cas/cobra.xml"
+    }
+}
+
+def buildBinaryInitPackage() {
+    dir("${BRANCH_NAME}/aladdin-cas") {
+        sh 'ls -a '
+        sh 'pwd'
+        sh 'curl -X DELETE "http://aladdin-cas-milvus:19121/collections/face_recognition" -H "accept: application/json"'
+        sh 'curl -X DELETE "http://aladdin-cas-milvus:19121/collections/object_detection" -H "accept: application/json"'
+        sh 'cd init && sh package.sh'
+        sh 'init/dist/aladdin-cas-init/aladdin-cas-init'
+    }
+}
+
+def buildBinaryInitPackageArm() {
+    // milvus在arm构建机上无法使用，cpu架构不支持，取消执行Init及UT测试
+    dir("${BRANCH_NAME}/aladdin-cas") {
+        sh 'ls -a '
+        sh 'pwd'
+        // sh 'curl -X DELETE "http://aladdin-cas-milvus:19121/collections/face_recognition" -H "accept: application/json"'
+        // sh 'curl -X DELETE "http://aladdin-cas-milvus:19121/collections/object_detection" -H "accept: application/json"'
+        sh 'cd init && sh package.sh'
+        // sh 'init/dist/aladdin-cas-init/aladdin-cas-init'
+    }
+}
+
+def buildBinaryPackage() {
+    dir("${BRANCH_NAME}/aladdin-cas") {
+    sh 'ls -a '
+    sh 'pwd'
+	sh 'cd src && sh package.sh'
+	sh 'nohup src/dist/aladdin-cas/aladdin-cas &'
+	sh 'sleep 120'
+	sh 'ps aux|grep aladdin-cas'
+	// sh 'PYTHONPATH=$(pwd)/src python3 -m unittest -v unit_test/test_api_*.py'
+	sh 'pkill -9 aladdin-cas'
+    }
+}
+
+def buildBinaryPackageArm() {
+    // milvus在arm构建机上无法使用，cpu架构不支持，取消执行Init及UT测试
+    dir("${BRANCH_NAME}/aladdin-cas") {
+    sh 'ls -a '
+    sh 'pwd'
+	sh 'cd src && sh package.sh'
+	// sh 'nohup src/dist/aladdin-cas/aladdin-cas &'
+	// sh 'sleep 120'
+	// sh 'ps aux|grep aladdin-cas'
+	// sh 'PYTHONPATH=$(pwd)/src python3 -m unittest -v unit_test/test_api_*.py'
+	// sh 'pkill -9 aladdin-cas'
+    }
+}
+
+def buildCentosPackage() {
+    dir("${BRANCH_NAME}/aladdin-cas") {
+	sh 'mkdir -p aladdin-cas_service && cp -rp src/dist/aladdin-cas aladdin-cas_service/bin'
+	sh 'cp -rp scripts/centos/env.conf aladdin-cas_service'
+	sh 'mkdir -p ${MY_PACKAGE_NAME}/app && mv aladdin-cas_service ${MY_PACKAGE_NAME}/app'
+	sh 'tar -czvf ${MY_PACKAGE_NAME}.tar.gz ${MY_PACKAGE_NAME}'
+    }
+}
+
+def buildDockerImage() {
+    dir("${BRANCH_NAME}/aladdin-cas") {
+	sh 'cd scripts/docker_package && sh build.sh'
+    sh 'cd scripts/docker_package && sh build.sh init'
+    }
+}
+
+def pushDockerImageArm(){
+    stage 'PushDockerImageArm'
+    // push镜像到harbor
+    dir("${WORKSPACE}") {
+        script {
+            dockerRegistryUrl = "acr-arm.aishu.cn"
+        }
+        withCredentials([[
+            $class: 'UsernamePasswordMultiBinding',
+            credentialsId: 'DOCKER_HUB_ACR',
+            usernameVariable: 'DOCKER_HUB_USER',
+            passwordVariable: 'DOCKER_HUB_PASSWORD'
+        ]]) {
+            echo "push镜像到harbor"
+            sh """
+            docker tag aladdin-cas:latest ${dockerRegistryUrl}/ict/aladdin-cas:${BRANCH_NAME}
+            docker tag aladdin-cas-init:latest ${dockerRegistryUrl}/ict/aladdin-cas-init:${BRANCH_NAME}
+            docker login ${dockerRegistryUrl} -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
+            docker push ${dockerRegistryUrl}/ict/aladdin-cas:${BRANCH_NAME}
+            docker push ${dockerRegistryUrl}/ict/aladdin-cas-init:${BRANCH_NAME}
+            """
+        }
+    }
+}
+
+def pushDockerImageX86(){
+    stage 'PushDockerImageX86'
+    // push镜像到harbor
+    dir("${WORKSPACE}") {
+        script {
+            dockerRegistryUrl = "acr.aishu.cn"
+        }
+        withCredentials([[
+            $class: 'UsernamePasswordMultiBinding',
+            credentialsId: 'DOCKER_HUB_ACR',
+            usernameVariable: 'DOCKER_HUB_USER',
+            passwordVariable: 'DOCKER_HUB_PASSWORD'
+        ]]) {
+            echo "push镜像到harbor"
+            sh """
+            docker tag aladdin-cas:latest ${dockerRegistryUrl}/ict/aladdin-cas:${BRANCH_NAME}
+            docker tag aladdin-cas-init:latest ${dockerRegistryUrl}/ict/aladdin-cas-init:${BRANCH_NAME}
+            docker login ${dockerRegistryUrl} -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
+            docker push ${dockerRegistryUrl}/ict/aladdin-cas:${BRANCH_NAME}
+            docker push ${dockerRegistryUrl}/ict/aladdin-cas-init:${BRANCH_NAME}
+            """
+        }
+    }
+}
+
+def pushHelm(server_name){
+    stage 'PushHelm'
+    dir("${BRANCH_NAME}/aladdin-cas/scripts/helm") {
+        echo "Chart: ${server_name}"
+        sh "./build_tools/helm package ${server_name} --save=false"
+        withCredentials([[
+            $class: 'UsernamePasswordMultiBinding',
+            credentialsId: 'DOCKER_HUB_ACR',
+            usernameVariable: 'DOCKER_HUB_USER',
+            passwordVariable: 'DOCKER_HUB_PASSWORD'
+        ]]) {
+            DOCKER_REGISTRY_URL = "acr.aishu.cn"
+            script { PACKAGE_NAME = sh(script: "ls|grep ${server_name}.*tgz", returnStdout: true).trim() }
+            sh "curl -s -u ${DOCKER_HUB_USER}:${DOCKER_HUB_PASSWORD} -w '\n%{http_code}\n' -H \"Content-Type: multipart/form-data\" -F \"chart=@${PACKAGE_NAME};type=application/x-compressed-tar\" -X POST \"https://${DOCKER_REGISTRY_URL}/api/chartrepo/ict/charts\" | { set -e; IFS= read msg; read httpcode; echo \$msg; grep -qE '(2..|409)' <<< \$httpcode;}"
+        }
+    }
+}
+
+def dockerBuildArm() {
+    stage 'build package Arm'
+    sh 'docker pull acr-arm.aishu.cn/ict/aladdin-cas-base:forarm'
+    withDockerRegistry([url: 'acr-arm.aishu.cn']) {
+        withDockerContainer(args: "--privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/JFR/deps_code/${BRANCH_NAME}:$WORKSPACE/platform:rw --link aladdin-cas-mongo:aladdin-cas-mongo --link aladdin-cas-mysql:aladdin-cas-mysql --link aladdin-cas-milvus:aladdin-cas-milvus --link dl-inference-server:dl-inference-server -e WORKSPACE=$WORKSPACE -e MY_PACKAGE_NAME=$MY_PACKAGE_NAME -e MAX_MEM_USE=100Gi -e mongo_host=aladdin-cas-mongo -e mysql_host=aladdin-cas-mysql -e milvus_host='10.2.185.84' -e tfserving_host=dl-inference-server -e WORKER_PROCESSES=2", image: "acr-arm.aishu.cn/ict/aladdin-cas-base:forarm") {  
+            checkCodeStyle()
+            // initServer()
+            // unitTest()
+            buildBinaryInitPackageArm()
+            buildBinaryPackageArm()
+            buildCentosPackage()
+            buildDockerImage()
+        }
+    }
+}
+
+def dockerBuildX86() {
+    stage 'build package X86'
+    sh 'docker pull acr.aishu.cn/ict/aladdin-cas-base:X86'
+    withDockerRegistry([url: 'acr.aishu.cn']) {
+        withDockerContainer(args: "--privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/JFR/deps_code/${BRANCH_NAME}:$WORKSPACE/platform:rw --link aladdin-cas-mongo:aladdin-cas-mongo --link aladdin-cas-mysql:aladdin-cas-mysql --link aladdin-cas-milvus:aladdin-cas-milvus --link dl-inference-server:dl-inference-server -e WORKSPACE=$WORKSPACE -e MY_PACKAGE_NAME=$MY_PACKAGE_NAME -e MAX_MEM_USE=100Gi -e mongo_host=aladdin-cas-mongo -e mysql_host=aladdin-cas-mysql -e milvus_host=aladdin-cas-milvus -e tfserving_host=dl-inference-server -e WORKER_PROCESSES=2", image: "acr.aishu.cn/ict/aladdin-cas-base:x86") {  
+            checkCodeStyle()
+            initServer()
+            unitTest()
+            buildBinaryInitPackage()
+            buildBinaryPackage()
+            buildCentosPackage()
+            buildDockerImage()
+        }
+    }
+}
+
+def uploadReport(){
+        MY_JOB_NAME = 'aladdin-cas'
+        stage 'Upload Metrix Report'
+        dir("${WORKSPACE}/${BRANCH_NAME}/aladdin-cas") {
+            sh 'ls -al'
+            ftpPublisher alwaysPublishFromMaster: false, 
+            continueOnError: false, 
+            failOnError: false, 
+            publishers: [
+                [configName: 'FTP_ICT_REPORT', 
+                    transfers: [
+                        [
+                            asciiMode: false, 
+                            cleanRemote: false, excludes: '', 
+                            flatten: false, 
+                            makeEmptyDirs: false, 
+                            noDefaultExcludes: false, 
+                            patternSeparator: '[, ]+', 
+                            remoteDirectory: "/report/${MY_JOB_NAME}/${new Date().format('yyyyMMdd-HHmmss')}-${BUILD_NUMBER}", 
+                            remoteDirectorySDF: false, 
+                            sourceFiles: "coverage.xml,cobra.xml,nose2-junit.xml,pylint.out"
+                        ]
+                    ], 
+                    usePromotionTimestamp: false, 
+                    useWorkspaceInPromotion: false, 
+                    verbose: true
+                ]
+            ]
+        }
+        build job: 'M_JenkinsMetrix', parameters: [string(name: 'subsystem', value: 'Aladdin')], propagate: false, wait: false
+}
+
+def startMysqlServerX86(){
+    stage 'StartMysqlServerX86'
+    dir("${WORKSPACE}/${BRANCH_NAME}/aladdin-cas") {
+        sh "docker kill aladdin-cas-mysql || echo ' have no container named aladdin-cas-mysql '"
+        sh "docker run -d --rm --name aladdin-cas-mysql -e MYSQL_ROOT_PASSWORD=123456 acr.aishu.cn/ict/mysql:5.7"
+    }
+}
+
+def startMysqlServerArm(){
+    stage 'StartMysqlServerArm'
+    dir("${WORKSPACE}/${BRANCH_NAME}/aladdin-cas") {
+        sh "docker kill aladdin-cas-mysql || echo ' have no container named aladdin-cas-mysql '"
+        sh "docker run -d --rm --name aladdin-cas-mysql -e MYSQL_ROOT_PASSWORD=123456 acr.aishu.cn/ict/mariadb:10.4.14"
+    }
+}
+
+def initMysqlX86() {
+    stage 'initial mysql X86'
+    withDockerRegistry([url: 'acr.aishu.cn']) {
+        withDockerContainer(args: "--privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/JFR/deps_code/AS6.0:$WORKSPACE/platform:rw --link aladdin-cas-mysql:aladdin-cas-mysql -e WORKSPACE=$WORKSPACE ", image: "acr.aishu.cn/ict/mysql:5.7") {
+            dir("${BRANCH_NAME}/aladdin-cas") {
+                sh "sleep 10"
+                sh "mysql -haladdin-cas-mysql -uroot -p123456 < scripts/sql/mysql.sql"
+            }
+        }
+    }
+}
+
+def initMysqlArm() {
+    stage 'initial mysql Arm'
+    withDockerRegistry([url: 'acr.aishu.cn']) {
+        withDockerContainer(args: "--privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/JFR/deps_code/AS6.0:$WORKSPACE/platform:rw --link aladdin-cas-mysql:aladdin-cas-mysql -e WORKSPACE=$WORKSPACE ", image: "acr.aishu.cn/ict/mariadb:10.4.14") {
+            dir("${BRANCH_NAME}/aladdin-cas") {
+                sh "sleep 10"
+                sh "mariadb -haladdin-cas-mysql -uroot -p123456 < scripts/sql/mysql.sql"
+            }
+        }
+    }
+}
+
+def startMongoServerX86(){
+    stage 'StartMongoServerX86'
+    dir("${WORKSPACE}/${BRANCH_NAME}/aladdin-cas") {
+        sh "docker kill aladdin-cas-mongo || echo 'have no container named aladdin-cas-mongo' "
+        sh "docker run -d --rm --name aladdin-cas-mongo acr.aishu.cn/public/mongo:4.2.8"
+        //sh "docker run -d --rm --name aladdin-cas-mongo -v ${WORKSPACE}/${BRANCH_NAME}/aladdin-cas/scripts/sql/init_mongo_database.js:/docker-entrypoint-initdb.d/init_mongoDB.js acr.aishu.cn/ict/mongo:4.2.8"
+        sh "docker ps -a"
+    }
+}
+
+def startMongoServerArm(){
+    stage 'StartMongoServerArm'
+    dir("${WORKSPACE}/${BRANCH_NAME}/aladdin-cas") {
+        sh "docker kill aladdin-cas-mongo || echo 'have no container named aladdin-cas-mongo' "
+        sh "docker run -d --rm --name aladdin-cas-mongo acr.aishu.cn/ict/mongo:4.2.8"
+        //sh "docker run -d --rm --name aladdin-cas-mongo -v ${WORKSPACE}/${BRANCH_NAME}/aladdin-cas/scripts/sql/init_mongo_database.js:/docker-entrypoint-initdb.d/init_mongoDB.js acr.aishu.cn/ict/mongo:4.2.8"
+        sh "docker ps -a"
+    }
+}
+
+def startDLInferenceServerArm(){
+    stage 'Start dl-inference-serverArm'
+    dir("${WORKSPACE}/${BRANCH_NAME}/aladdin-cas") {
+        sh "docker kill dl-inference-server || echo ' have no container named dl-inference-server '"
+        sh "docker run -d --rm --name dl-inference-server acr.aishu.cn/ict/dl-inference-server:forarm"
+        sh "docker ps -a"
+    }
+}
+
+def startDLInferenceServerX86(){
+    stage 'Start dl-inference-serverX86'
+    dir("${WORKSPACE}/${BRANCH_NAME}/aladdin-cas") {
+        sh "docker kill dl-inference-server || echo ' have no container named dl-inference-server '"
+        sh "docker run -d --rm --name dl-inference-server acr.aishu.cn/ict/dl-inference-server:v2"
+        sh "docker ps -a"
+    }
+}
+
+def startMilvusServerArm(){
+    stage 'StartMilvusServerArm'
+    dir("${WORKSPACE}/${BRANCH_NAME}/aladdin-cas") {
+        sh "docker kill aladdin-cas-milvus || echo 'have no container named aladdin-cas-milvus' "
+        sh "docker run -d --rm --name aladdin-cas-milvus --link aladdin-cas-mysql:aladdin-cas-mysql acr-arm.aishu.cn/ict/milvus:0.10.0-cpu"
+        // sh "docker run -d --rm --name aladdin-cas-milvus -v ${WORKSPACE}/${BRANCH_NAME}/aladdin-cas/scripts/conf:/var/lib/milvus/conf --link aladdin-cas-mysql:aladdin-cas-mysql acr-arm.aishu.cn/ict/milvus:0.10.0-cpu"
+        sh "sleep 2"
+        sh "docker ps -a"
+    }
+}
+
+def startMilvusServerX86(){
+    stage 'StartMilvusServerX86'
+    dir("${WORKSPACE}/${BRANCH_NAME}/aladdin-cas") {
+        sh "docker kill aladdin-cas-milvus || echo 'have no container named aladdin-cas-milvus' "
+        sh "docker run -d --rm --name aladdin-cas-milvus acr.aishu.cn/ict/milvus:0.10.0-cpu"
+        sh "docker ps -a"
+    }
+}
+
+def clearForeignerServer(){
+    stage 'KillForeignerServer'
+    sh "docker kill aladdin-cas-mongo aladdin-cas-milvus"
+} 
+
+node('docker-builder') {
+    checkoutCode()
+    globalValues()
+    SecurityCheck()
+    startMysqlServerX86()
+    initMysqlX86()
+    startMilvusServerX86()
+    startDLInferenceServerX86()
+    startMongoServerX86()
+    dockerBuildX86()
+    clearForeignerServer()
+    pushDockerImageX86()
+    if (BRANCH_NAME == "master") {
+        uploadReport()
+    }
+}
+
+// node('docker-builder') {
+node('arm64') {
+    checkoutCode()
+    globalValues()
+    // SecurityCheck()
+    startMysqlServerArm()
+    initMysqlArm()
+    startMilvusServerArm()
+    startDLInferenceServerArm()
+    startMongoServerArm()
+    dockerBuildArm()
+    clearForeignerServer()
+    pushDockerImageArm()
+    if (BRANCH_NAME == "master") {
+        uploadReport()
+    }
+}

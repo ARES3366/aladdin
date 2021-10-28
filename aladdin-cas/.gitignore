@@ -1,0 +1,8 @@
+*.log
+*.out
+*.temp
+*.tmp
+*.pyc
+*.spec
+/src/dist
+/src/build

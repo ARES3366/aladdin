@@ -1,0 +1,12 @@
+[Unit]
+Description=The Pandora service
+
+[Service]
+User=root
+WorkingDirectory=/sysvol/apphome/app/pandora_service
+ExecStart=/sysvol/apphome/app/pandora_service/bin/pandora
+EnvironmentFile=/sysvol/apphome/app/pandora_service/env.conf
+Restart=1
+RestartSec=30
+
+[Install]

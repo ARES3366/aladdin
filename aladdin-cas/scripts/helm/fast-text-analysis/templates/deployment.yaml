@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: fast-text-analysis
+  labels:
+    app.kubernetes.io/name: fast-text-analysis
+    helm.sh/chart: {{ include "fast-text-analysis.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fast-text-analysis
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: fast-text-analysis
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SERVICE_TYPE
+              value: fast-text-analysis
+            - name: LOG_LEVEL
+              value: !!str {{ .Values.env.LOGGING_LEVEL }}
+            - name: DEBUG
+              value: !!str {{ .Values.env.tornado.DEBUG }}
+            - name: MAX_BUFFER_SIZE
+              value: !!str {{ .Values.env.tornado.MAX_BUFFER_SIZE }}
+            - name: MAX_BODY_SIZE
+              value: !!str {{ .Values.env.tornado.MAX_BODY_SIZE }}
+            - name: WORKER_PROCESSES
+              value: !!str {{ .Values.env.tornado.WORKER_PROCESSES }}
+            - name: MAX_MEM_USE
+              value: !!str {{ .Values.resources.limits.memory }}
+            - name: TZ
+              value: {{ .Values.env.timezone }}
+            - name: LANG
+              value: en_US.UTF-8
+            - name: SERVER_PORT
+              value: !!str {{ .Values.service.port }}
+            - name: tfserving_host
+              value: {{ .Values.env.tfserving.host | quote }}
+            - name: tfserving_port
+              value: {{ .Values.env.tfserving.port | quote }}
+            
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                - {{ include "fast-text-analysis.name" . }}
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                - {{ .Release.Name }}
+            topologyKey: "kubernetes.io/hostname"
+        

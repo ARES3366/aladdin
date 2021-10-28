@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: common-classify
+  labels:
+    app.kubernetes.io/name: common-classify
+    helm.sh/chart: {{ include "common-classify.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: common-classify
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: common-classify
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SERVICE_TYPE
+              value: common-classify
+            - name: LOG_LEVEL
+              value: !!str {{ .Values.env.LOGGING_LEVEL }}
+            - name: DEBUG
+              value: !!str {{ .Values.env.tornado.DEBUG }}
+            - name: MAX_BUFFER_SIZE
+              value: !!str {{ .Values.env.tornado.MAX_BUFFER_SIZE }}
+            - name: MAX_BODY_SIZE
+              value: !!str {{ .Values.env.tornado.MAX_BODY_SIZE }}
+            - name: MAX_MEM_USE
+              value: !!str {{ .Values.resources.limits.memory }}
+            - name: TZ
+              value: {{ .Values.env.timezone }}
+            - name: LANG
+              value: en_US.UTF-8
+            - name: SERVER_PORT
+              value: !!str {{ .Values.service.port }}
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health/alive
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 30
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 30
+            failureThreshold: 3
+          #livenessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+          #readinessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+

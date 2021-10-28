@@ -1,0 +1,49 @@
+FROM acr2.aishu.cn/public/centos:centos7
+MAINTAINER ma.xiangxiang@eisoo.com
+RUN yum install epel-release -y
+RUN yum install python36-devel -y
+RUN ln -s /usr/bin/python3.6 /bin/python3 | true
+RUN yum install python36-pip -y
+RUN ln -s /usr/bin/pip3.6 /bin/pip3 | true
+RUN yum -y install gcc-c++
+RUN yum -y install cmake
+RUN yum -y install make
+RUN pip3 install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple wheel
+RUN pip3 install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple --upgrade pip
+RUN pip3 install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple  setuptools==44.0.0
+RUN pip3 install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple aiounittest==1.4.0
+RUN pip3 install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple tornado==6.0.4
+RUN pip3 install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple requests==2.24.0
+RUN pip3 install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple configparser==5.0.0
+RUN pip3 install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple xpinyin==0.5.7
+RUN pip3 install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple jieba==0.42.1
+RUN pip3 install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple scipy
+RUN pip3  install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple nose2==0.9.2
+RUN pip3  install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com/simple aiohttp==3.6.2
+RUN pip3  install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple pillow==8.0.1
+RUN yum -y install docker
+RUN pip3 install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple prettytable==0.7.2
+RUN yum -y install libSM
+RUN yum -y install libXext
+RUN yum -y install libXrender
+RUN pip install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple dlib==19.20.0
+RUN pip install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple face_recognition
+RUN pip install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple pymysql==0.9.2
+RUN pip install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple aiomysql==0.0.20
+RUN pip install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple grpcio-tools==1.30.0
+RUN pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com/simple grpcio==1.30.0
+RUN pip install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple pymilvus==0.2.14
+RUN pip install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple setuptools==44.0.0
+RUN pip install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple motor==2.1.0
+ENV LANG en_US.utf8
+RUN pip3 install numpy==1.16.3
+RUN pip3 install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple scikit-learn==0.22.1  
+RUN pip3  install --trusted-host https://mirrors.huaweicloud.com -i https://mirrors.huaweicloud.com/repository/pypi/simple pylint==2.5.3
+WORKDIR /
+RUN curl -o pyinstaller-v3.5.tar.gz https://gitlab.aishu.cn/Mace.zhang/pyinstaller/-/archive/v3.5/pyinstaller-v3.5.tar.gz
+RUN tar -zxvf pyinstaller-v3.5.tar.gz
+WORKDIR /pyinstaller-v3.5
+RUN python3 setup.py install
+WORKDIR /
+RUN rm -rf pyinstaller-v3.5
+RUN rm -rf pyinstaller-v3.5.tar.gz

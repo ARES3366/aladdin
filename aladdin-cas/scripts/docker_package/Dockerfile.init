@@ -1,0 +1,8 @@
+FROM acr.aishu.cn/public/ubuntu:20.10
+ENV LANG en_US.utf8
+ADD init/dist/aladdin-cas-init /opt/aladdin-cas-init
+RUN chmod 757 -R /opt/aladdin-cas-init
+RUN chmod 757 -R /root
+RUN groupadd --gid 5000 newuser && useradd --home-dir /home/newuser --create-home --uid 5000 --gid 5000 --shell /bin/sh --skel /dev/null newuser
+USER newuser
+CMD ["/opt/aladdin-cas-init/aladdin-cas-init"]

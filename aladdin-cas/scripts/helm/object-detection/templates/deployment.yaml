@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: object-detection
+  labels:
+    app.kubernetes.io/name: object-detection
+    helm.sh/chart: {{ include "object-detection.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: object-detection
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: object-detection
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+        kubernetes.io/hostname: {{ .Values.nodeSelector }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SERVICE_TYPE
+              value: object-detection
+            - name: LOG_LEVEL
+              value: {{ .Values.env.LOGGING_LEVEL | quote }}
+            - name: DEBUG
+              value: {{ .Values.env.tornado.DEBUG | quote }}
+            - name: MAX_BUFFER_SIZE
+              value: {{ .Values.env.tornado.MAX_BUFFER_SIZE | quote }}
+            - name: MAX_BODY_SIZE
+              value: {{ .Values.env.tornado.MAX_BODY_SIZE | quote }}
+            - name: MAX_MEM_USE
+              value: {{ .Values.resources.limits.memory | quote }}
+            - name: TZ
+              value: {{ .Values.env.timezone }}
+            - name: LANG
+              value: en_US.UTF-8
+            - name: SERVER_PORT
+              value: {{ .Values.service.port | quote }}
+            - name: mysql_host
+              value: {{ .Values.env.mysql.host | quote }}
+            - name: mysql_user
+              value: {{ .Values.env.mysql.user | quote }}
+            - name: mysql_db
+              value: {{ .Values.env.mysql.db | quote }}
+            - name: mysql_password
+              value: {{ .Values.env.mysql.password | quote }}
+            - name: milvus_host
+              value: {{ .Values.env.milvus.host | quote }}
+            - name: milvus_port
+              value: {{ .Values.env.milvus.port | quote }}
+            - name: mongo_host
+              value: {{ .Values.env.mongo.host | quote }}
+            - name: mongo_user
+              value: {{ .Values.env.mongo.user | quote }}
+            - name: mongo_db
+              value: {{ .Values.env.mongo.db | quote }}
+            - name: mongo_password
+              value: {{ .Values.env.mongo.password | quote }}
+            - name: mongo_port
+              value: {{ .Values.env.mongo.port | quote }}
+            - name: tfserving_host
+              value: {{ .Values.env.tfserving.host | quote }}
+            - name: tfserving_port
+              value: {{ .Values.env.tfserving.port | quote }}
+            - name: service_code
+              value: {{ .Values.env.service_code | quote }}
+            - name: globalization_lang
+              value: {{ .Values.env.globalization_lang | quote }}
+            - name: exception_level
+              value: {{ .Values.env.exception_level | quote }}
+            - name: detection_confidence_threshold
+              value: {{ .Values.env.algorithm.detection_confidence_threshold | quote }}
+            - name: detection_model_name
+              value: {{ .Values.env.algorithm.detection_model_name | quote }}
+            - name: classify_model_name
+              value: {{ .Values.env.algorithm.classify_model_name | quote }}
+            - name: milvus_face_encoding_collection
+              value: {{ .Values.env.milvus_face_encoding_collection | quote }}
+            - name: milvus_od_collection
+              value: {{ .Values.env.milvus_od_collection | quote }}
+            - name: mongo_od_collection
+              value: {{ .Values.env.mongo_collection | quote }}
+
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          #livenessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+          #readinessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+

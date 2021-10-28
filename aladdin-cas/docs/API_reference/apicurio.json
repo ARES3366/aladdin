@@ -1,0 +1,2866 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Aladdin_API",
+        "version": "1.0.2",
+        "description": "文本分析服务",
+        "contact": {
+
+        }
+    },
+    "paths": {
+        "/api/aladdin-cas/analysis/text/matchwords": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MatchWordsRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MatchWordsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "自定义敏感词检测"
+            }
+        },
+        "/api/aladdin-cas/analysis/text/batch_matchwords": {
+            "summary": "批量铭感词检测",
+            "description": "批量敏感词检测",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BatchMatchWordsRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BatchMatchWordsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "批量敏感词检测",
+                "description": "批量敏感词检测"
+            }
+        },
+        "/api/aladdin-cas/analysis/text/keywords": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KeywordsRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KeywordsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "文本关键词提取"
+            }
+        },
+        "/api/aladdin-cas/analysis/text/illegality": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IllegalityRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IllegalityResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "非法内容检测"
+            }
+        },
+        "/api/aladdin-cas/analysis/text/abstract": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TextAbstractRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TextAbstractResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "文本摘要提取"
+            }
+        },
+        "/api/aladdin-cas/analysis/text/common_classify": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CommonClassifyRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonClassifyResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "通用文本分类"
+            }
+        },
+        "/api/aladdin-cas/analysis/text/batch_common_classify/": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BatchCommonClassifyRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BatchCommonClassifyResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "批量通用文本分类",
+                "description": "批量通用文本分类"
+            }
+        },
+        "/api/aladdin-cas/analysis/text/privacy_properties": {
+            "put": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateParameter"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UpdateResult"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UpdateFaild"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "隐私信息识别修改配置文件"
+            }
+        },
+        "/api/aladdin-cas/analysis/text/privacy_recognition": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PrivacyRecCon"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PrivacyMatchMessage"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PrivacyFailed"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "隐私信息识别功能"
+            }
+        },
+        "/api/aladdin-cas/analysis/images/keyword_summary": {
+            "summary": "图像摘要标签",
+            "description": "图像摘要标签",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ImagesSummaryKeywordRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ImagesSummaryKeywordResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "图像摘要标签"
+            }
+        },
+        "/api/aladdin-cas/analysis/text/abstract_from_text_interception": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TextAbstractFmkwdRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TextAbstractFmkwdResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "利用关键词提取文本摘要",
+                "description": "提取含有关键词的权重最高的短句的上下文作为摘要"
+            }
+        },
+        "/api/aladdin-cas/analysis/text/doc_fingerprint": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TextAbstractRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DocFingerprintResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "文档指纹生成"
+            }
+        },
+        "/api/aladdin-cas/analysis/text/doc_fingerprint_cluster": {
+            "post": {
+                "summary": "利用文档指纹进行文本折叠"
+            }
+        },
+        "/api/aladdin-cas/analysis/text/fingerprint_keywords": {
+            "summary": "文档指纹关键词及权重",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TextAbstractRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FingerprintKeywordsRequest"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "文档指纹生成的关键词"
+            }
+        },
+        "/api/aladdin-cas/analysis/image/delete_image": {
+            "description": "通过url删除mysql数据库中的元数据和",
+            "delete": {
+                "parameters": [
+                    {
+                        "name": "url",
+                        "description": "图像的url",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "删除图片以及元数据"
+            },
+            "parameters": [
+                {
+                    "name": "url",
+                    "description": "图像的url",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "query"
+                }
+            ]
+        },
+        "/api/aladdin-cas/analysis/image/face_meta_data": {
+            "summary": "获取图片的元数据",
+            "description": "1、根据id、url获取人脸元数据\n2、根据id更新人脸元数据",
+            "get": {
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "人脸元数据id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "url",
+                        "description": "原图的路径",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ImageSearchGETSuc"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ImageSearchGETErr"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "获取人脸元数据",
+                "description": "根据url或id获取人脸元数据"
+            },
+            "put": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FaceMetaData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Success"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "更新人脸元数据"
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FaceMetaDataPostRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FaceMetaDataPostResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "人脸向量、元数据分析与存储",
+                "description": "分析图片得到人脸向量与位置元数据并存储"
+            },
+            "delete": {
+                "parameters": [
+                    {
+                        "name": "face_id",
+                        "description": "人脸id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "url",
+                        "description": "原图的路径",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Success"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "删除人脸元数据资源"
+            }
+        },
+        "/api/aladdin-cas/analysis/image/image_embedding": {
+            "summary": "图像向量化",
+            "description": "在用户上传图像的同时，完成目标检测、子图裁剪、子图向量化、元数据入库的操作。其中，接收到AS请求的base64编码，通过时间等信息返回给，将base64编码转成图像后依次执行maskrcnn获取子图，以及fnbet_v2分类与提取向量，最后存入数据库",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ImageEmbeddingPost"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ImagePost200"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "图像向量化",
+                "description": "根据url将用户上传的图片提取子图，并对子图向量化保存"
+            }
+        },
+        "/api/aladdin-cas/analysis/image/image_meta_data": {
+            "summary": "获取元数据",
+            "get": {
+                "parameters": [
+                    {
+                        "name": "url",
+                        "description": "图像的地址",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ImageMetaDataList"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "获取子图元数据",
+                "description": "通过url获取子图的元数据"
+            }
+        },
+        "/api/aladdin-cas/analysis/image/image_search": {
+            "summary": "以图搜图",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchImage"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ImageSearchResultList"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "搜索与图片相似的前K张图片",
+                "description": "搜索与图片相似的前K张图片"
+            }
+        },
+        "/api/aladdin-cas/analysis/image/image_search_by_seg": {
+            "summary": "通过切片以图搜图",
+            "description": "",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchImageBySeg"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ImageSearchResultList"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "搜索指定区域相似的前K张图片",
+                "description": "通过base64编码搜索与用户指定图片某个区域相似的前K张图片"
+            }
+        },
+        "/api/aladdin-cas/analysis/image/image_search_by_mil": {
+            "summary": "通过milvus_Id以图搜图",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchImageByMil"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ImageSearchResultList"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "通过milvus_Id以图搜图"
+            }
+        },
+        "/api/aladdin-cas/analysis/image/image_search_by_base64": {
+            "summary": "通过base64编码查询相似图片",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchImageByBase64"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ImageSearchResultList"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "通过base64编码查询相似图片"
+            }
+        },
+        "/api/aladdin-cas/analysis/images/similar_face": {
+            "summary": "人脸编码",
+            "description": "根据人脸id与人脸切图原始数据查找相似的人脸元数据",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SimilarFaceRequest"
+                            }
+                        }
+                    },
+                    "required": false
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/FaceMetaData"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequest400"
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "以脸搜图",
+                "description": "根据人脸id或者人脸切图数据搜索相似的人脸图片"
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ErrorBase": {
+                "title": "Root Type for ErrorBase",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "cause": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "code": 403105,
+                    "message": "当前文档已处于待审核状态，无法重复发起申请",
+                    "cause": "Can't submit applications, being audited.（错误提供者：eachttpserver，错误值：438，错误位置：../share/ncEACPerm2Handler.cpp:515）"
+                }
+            },
+            "UpdateParameter": {
+                "title": "Root Type for UpdateParameter",
+                "description": "",
+                "required": [
+                    "parameter"
+                ],
+                "type": "object",
+                "properties": {
+                    "parameter": {
+                        "$ref": "#/components/schemas/UpdateItem",
+                        "description": ""
+                    }
+                },
+                "example": {
+                    "parameter": {
+
+                    }
+                }
+            },
+            "UpdateItem": {
+                "title": "Root Type for UpdateItem",
+                "description": "",
+                "required": [
+                    "rate_grade",
+                    "recognize_class"
+                ],
+                "type": "object",
+                "properties": {
+                    "recognize_class": {
+                        "description": "选择性：\"update\"（修改）\"check\"（查看）\"default\"（默认）， 若为\"update\"，则参数\"update_property\"为必须 若为\"check\"，则不须参数\"update_property\" 若为\"default\"，则如上\"update_propertiy\"的值为默认",
+                        "type": "string"
+                    },
+                    "rate_grade": {
+                        "description": "选择性：\"高\",\"中\",\"低\"，若填如其他值，则选择默认选择\"中\"",
+                        "type": "string"
+                    },
+                    "update_propertiy": {
+                        "$ref": "#/components/schemas/UpdateClass",
+                        "description": "若属性\"recognize_class\"的值为\"update\"则需要",
+                        "properties": {
+                            "cn_id": {
+                                "type": "string"
+                            },
+                            "cn_bank": {
+                                "type": "string"
+                            },
+                            "cn_email": {
+                                "type": "string"
+                            },
+                            "cn_telephone": {
+                                "type": "string"
+                            },
+                            "cn_passport": {
+                                "type": "string"
+                            },
+                            "cn_date": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "recognize_class": "update",
+                    "rate_grade": "中",
+                    "update_propertiy": {
+                        "cn_id": "true",
+                        "cn_bank": "true",
+                        "cn_email": "true",
+                        "cn_telephone": "true",
+                        "cn_passport": "false",
+                        "cn_date": "false"
+                    }
+                }
+            },
+            "UpdateClass": {
+                "title": "Root Type for UpdateClass",
+                "description": "",
+                "required": [
+                    "cn_bank",
+                    "cn_date",
+                    "cn_email",
+                    "cn_passport",
+                    "cn_telephone"
+                ],
+                "type": "object",
+                "properties": {
+                    "cn_id": {
+                        "description": "默认值为true",
+                        "type": "string"
+                    },
+                    "cn_bank": {
+                        "description": "默认值为ture",
+                        "type": "string"
+                    },
+                    "cn_email": {
+                        "description": "默认值为true",
+                        "type": "string"
+                    },
+                    "cn_telephone": {
+                        "description": "默认值为true",
+                        "type": "string"
+                    },
+                    "cn_passport": {
+                        "description": "默认值为false",
+                        "type": "string"
+                    },
+                    "cn_date": {
+                        "description": "默认值为false",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "cn_id": "true",
+                    "cn_bank": "true",
+                    "cn_email": "true",
+                    "cn_telephone": "true",
+                    "cn_passport": "false",
+                    "cn_date": "false"
+                }
+            },
+            "UpdateResult": {
+                "title": "Root Type for UpdateResult",
+                "description": "",
+                "required": [
+                    "class_message"
+                ],
+                "type": "object",
+                "properties": {
+                    "class_message": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UpdateAfterPrivacyClass"
+                        }
+                    }
+                },
+                "example": {
+                    "class_message": [
+                    ]
+                }
+            },
+            "UpdateAfterPrivacyClass": {
+                "title": "Root Type for UpdateAfterPrivacyClass",
+                "description": "",
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "example": [
+                    "cn_id",
+                    "cn_bank"
+                ]
+            },
+            "UpdateFaild": {
+                "title": "Root Type for UpdateFaild",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "message": "type error"
+                }
+            },
+            "KeywordsRequest": {
+                "title": "Root Type for KeywordsRequest",
+                "description": "文本分析关键词接口请求类型",
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "content": "在apicurio工具里导入这个json，在里面增加接口",
+                    "top_num": 10
+                }
+            },
+            "KeywordsResponse": {
+                "title": "Root Type for KeywordsResponse",
+                "description": "文本分析关键词返回参数类型",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "keywords": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "keywords": [
+                        "闰土",
+                        "父亲",
+                        "便",
+                        "知道",
+                        "猹"
+                    ]
+                }
+            },
+            "PrivacyRecCon": {
+                "title": "Root Type for cotentinfo",
+                "description": "请求参数",
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "description": "要分析的内容",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "content": "上海爱数信息技术股份有限公司"
+                }
+            },
+            "PrivacyMatchMessage": {
+                "title": "Root Type for MatchMessage",
+                "description": "识别出来的信息",
+                "required": [
+                    "message",
+                    "num",
+                    "status"
+                ],
+                "type": "object",
+                "properties": {
+                    "num": {
+                        "format": "int32",
+                        "description": "识别出的信息类别数量",
+                        "type": "integer"
+                    },
+                    "message": {
+                        "$ref": "#/components/schemas/PrivacyMatchResult",
+                        "description": "识别出来的具体信息"
+                    },
+                    "status": {
+                        "description": "识别出来的状态",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "num": 2,
+                    "message": {
+
+                    }
+                }
+            },
+            "PrivacyMatchResult": {
+                "title": "Root Type for MatchResult",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "cn_id": {
+                        "description": "- cn_id 身份证号",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PrivacyMatchResultItem"
+                        }
+                    },
+                    "cn_bank": {
+                        "description": "- cn_bank 银行卡号",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PrivacyMatchResultItem"
+                        }
+                    },
+                    "cn_email": {
+                        "description": "n- cn_email 邮箱地址",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PrivacyMatchResultItem"
+                        }
+                    },
+                    "cn_passport": {
+                        "description": "- cn_passport 护照",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PrivacyMatchResultItem"
+                        }
+                    },
+                    "cn_telephon": {
+                        "description": "- cn_telephon 电话",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PrivacyMatchResultItem"
+                        }
+                    },
+                    "cn_data": {
+                        "description": "- cn_date 日期",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PrivacyMatchResultItem"
+                        }
+                    }
+                },
+                "example": {
+                    "cn_id": [
+                    ],
+                    "cn_bank": [
+                    ],
+                    "cn_email": [
+                    ],
+                    "cn_passport": [
+                    ],
+                    "cn_telephon": [
+                    ],
+                    "cn_data": [
+                    ]
+                }
+            },
+            "PrivacyMatchResultItem": {
+                "title": "Root Type for MatchResultItem",
+                "description": "",
+                "required": [
+                    "match_con",
+                    "pos",
+                    "prob"
+                ],
+                "type": "object",
+                "properties": {
+                    "match_con": {
+                        "description": "匹配到的内容",
+                        "type": "string"
+                    },
+                    "pos": {
+                        "description": "匹配到的内容的位置",
+                        "type": "array",
+                        "items": {
+                            "format": "int32",
+                            "type": "integer"
+                        }
+                    },
+                    "prob": {
+                        "format": "double",
+                        "description": "匹配准确度",
+                        "type": "number"
+                    }
+                },
+                "example": {
+                    "match_con": "18516333333",
+                    "pos": [
+                        23,
+                        34
+                    ],
+                    "prob": 0.75
+                }
+            },
+            "PrivacyFailed": {
+                "title": "Root Type for PrivacyFailed",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "description": "返回的状态",
+                        "type": "integer"
+                    },
+                    "message": {
+                        "description": "错误信息",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "status": 1,
+                    "message": "not string"
+                }
+            },
+            "TextAbstractRequest": {
+                "title": "Root Type for TextAbstractRequest",
+                "description": "文本摘要请求类型",
+                "type": "object",
+                "properties": {
+                    "abstract": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "content": "深蓝的天空中挂着一轮金黄的圆月，下面是海边的沙地，都种着一望无际的碧绿的西瓜。其间有一个十一二岁的少年，项带银圈，手捏一柄钢叉，向一匹猹尽力地刺去。那猹却将身一扭，反从他的胯下逃走了。这少年便是闰土。我认识他时，也不过十多岁，离现在将有三十年了；那时我的父亲还在世，家景也好，我正是一个少爷。他便对父亲说，可以叫他的儿子闰土来管祭器的。我的父亲允许了；我也很高兴，因为我早听到闰土这名字，而且知道他和我仿佛年纪，闰月生的，五行缺土，所以他的父亲叫他闰土"
+                }
+            },
+            "TextAbstractResponse": {
+                "title": "Root Type for TextAbstractResponse",
+                "description": "文本摘要响应",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "abstract": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "abstract": "我也很高兴，因为我早听到闰土这名字，而且知道他和我仿佛年纪，闰月生的，五行缺土，所以他的父亲叫他闰土"
+                }
+            },
+            "CommonClassifyRequest": {
+                "title": "Root Type for CommonClassifyRequest",
+                "description": "通用文本分类请求类型",
+                "type": "object",
+                "properties": {
+                    "conten": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "conten": "观世界杯，享受视觉盛筵，心情很愉悦；说中国足球，恨铁不成钢，话题沉甸甸。"
+                }
+            },
+            "CommonClassifyResponse": {
+                "title": "Root Type for CommonClassifyResponse",
+                "description": "通用文本分类响应类型",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "label": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "label": "体育"
+                }
+            },
+            "BadRequest400": {
+                "title": "Root Type for BadRequest400",
+                "description": "请求失败类型",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "status": 1,
+                    "message": "REASON_OF_FAILED"
+                }
+            },
+            "ImagesSummaryKeywordRequest": {
+                "title": "Root Type for ImagesSummaryKeywordResponse",
+                "description": "图像摘要与标签请求类型",
+                "type": "object",
+                "properties": {
+                    "images": {
+                        "description": "请求的图像字典，key为图像名，value为图像文件的base64编码。",
+                        "type": "object",
+                        "properties": {
+                            "1.jpg": {
+                                "type": "string"
+                            },
+                            "2.png": {
+                                "type": "string"
+                            },
+                            "3.bmp": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "language": {
+                        "description": "返回的语言类型，可以取：chinese|english，默认为chinese",
+                        "type": "string"
+                    },
+                    "need_summary": {
+                        "description": "是否需要返回摘要",
+                        "type": "boolean"
+                    }
+                },
+                "example": {
+                    "images": {
+                        "1.jpg": "base64of1.jpg",
+                        "2.png": "base64of2.png",
+                        "3.bmp": "base64of3.bmp"
+                    },
+                    "language": "chinese",
+                    "need_summary": false
+                }
+            },
+            "ImagesSummaryKeywordResponse": {
+                "title": "Root Type for ImagesSummaryKeywordResponse2",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "keywords": {
+                        "description": "图像的标签字典，key为图片名，value为图片对应的10个标签列表。",
+                        "type": "object",
+                        "properties": {
+                            "1.jpg": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "2.png": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "summarys": {
+                        "description": "图片的摘要字典，key为图片的名，value为图片对应的5条摘要列表。\n当请求参数need_summay为true时返回该字段",
+                        "type": "object",
+                        "properties": {
+                            "1.jpg": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "2.png": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "keywords": {
+                        "1.jpg": [
+                            "kw0",
+                            "kw1",
+                            "kw2",
+                            "kw3",
+                            "kw4",
+                            "kw5",
+                            "kw6",
+                            "kw7",
+                            "kw8",
+                            "kw9"
+                        ],
+                        "2.png": [
+                            "kw0",
+                            "kw1",
+                            "kw2",
+                            "kw3",
+                            "kw4",
+                            "kw5",
+                            "kw6",
+                            "kw7",
+                            "kw8",
+                            "kw9"
+                        ]
+                    },
+                    "summarys": {
+                        "1.jpg": [
+                            "smr0",
+                            "smr1",
+                            "smr2",
+                            "smr3",
+                            "smr4"
+                        ],
+                        "2.png": [
+                            "smr0",
+                            "smr1",
+                            "smr2",
+                            "smr3",
+                            "smr4"
+                        ]
+                    }
+                }
+            },
+            "MatchWordsRequest": {
+                "title": "Root Type for MatchWordsRequest",
+                "description": "自定义敏感词检测请求类型",
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "description": "文本内容",
+                        "type": "string"
+                    },
+                    "words": {
+                        "description": "敏感词列表",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "example": {
+                    "content": "深蓝的天空中挂着一轮金黄的圆月，下面是海边的沙地，都种着一望无际的碧绿的西瓜。其间有一个十一二岁的少年，项带银圈，手捏一柄钢叉，向一匹猹尽力地刺去。那猹却将身一扭，反从他的胯下逃走了。这少年便是闰土。我认识他时，也不过十多岁，离现在将有三十年了；那时我的父亲还在世，家景也好，我正是一个少爷。他便对父亲说，可以叫他的儿子闰土来管祭器的。我的父亲允许了；我也很高兴，因为我早听到闰土这名字，而且知道他和我仿佛年纪，闰月生的，五行缺土，所以他的父亲叫他闰土",
+                    "words": [
+                        "闰土",
+                        "圆月"
+                    ]
+                }
+            },
+            "MatchWordsResponse": {
+                "title": "Root Type for MatchWordsResponse",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "word_locate": {
+                        "description": "敏感词分布字典，key为敏感词，value为包含敏感词的句子列表",
+                        "type": "object",
+                        "properties": {
+                            "闰土": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "word_locate": {
+                        "闰土": [
+                            "这少年便是闰土",
+                            "可以叫他的儿子闰土来管祭器的",
+                            "因为我早听到闰土这名字",
+                            "所以他的父亲叫他闰土"
+                        ]
+                    }
+                }
+            },
+            "IllegalityRequest": {
+                "title": "Root Type for IllegalityRequest",
+                "description": "非法内容检测请求格式",
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "description": "非法内容文本",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "content": "我想我算聪明，很快就了解如何讨男人欢心，帮他洗澡，光是擦肥皂就会使他勃起。其实我想我那时并不算是一个称职的性伴侣，躺到床上我就摊在那儿任他宰割，我的一些技巧是后来学的，首先我学的第一件事就是叫床，叫得如此逼真淫荡， 我知道跟我做爱的男人会因为他的女人叫到这种程度而很有成就感，而看他开心，我会更开心还有一些服务，像站在他身后，用双乳帮他洗背，他会迫不及待地来摸我的身体，甚至想赶快把澡给洗完。但是，我还会帮他洗那边，肥皂本身就滑滑的，还有我的十指，我会搓揉他的阴茎，轻抠他的鼠蹊，再去洗他的阴囊，洗不了多久就被阻止了，因为他太舒服。"
+                }
+            },
+            "IllegalityResponse": {
+                "title": "Root Type for IllegalityResponse",
+                "description": "非法内容检测响应类型",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "class_id": {
+                        "description": "文本非法类别的id：可取:legal|political|sexy|other_illegal",
+                        "type": "string"
+                    },
+                    "probe_dist": {
+                        "description": "文本符合各个类别上的概率。\nsex:色情\nlegal：合法\npolitical: 政治反动\nother_illegal: 赌博、涉赌、涉毒等其它非法类型",
+                        "type": "object",
+                        "properties": {
+                            "sexy": {
+                                "format": "double",
+                                "type": "number"
+                            },
+                            "legal": {
+                                "format": "double",
+                                "type": "number"
+                            },
+                            "political": {
+                                "format": "int32",
+                                "type": "integer"
+                            },
+                            "other_illegal": {
+                                "format": "double",
+                                "type": "number"
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "class_id": "sexy",
+                    "probe_dist": {
+                        "sexy": 0.8,
+                        "legal": 0.1,
+                        "political": 0,
+                        "other_illegal": 0.1
+                    }
+                }
+            },
+            "BatchCommonClassifyRequest": {
+                "title": "Root Type for BatchCommonClassifyRequest",
+                "description": "批量通用文本分类请求类型",
+                "type": "object",
+                "properties": {
+                    "content_list": {
+                        "description": "文本列表",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "example": {
+                    "content_list": [
+                        "观世界杯，享受视觉盛筵，心情很愉悦；说中国足球，恨铁不成钢，话题沉甸甸。",
+                        "韩红爱心西藏行车队出征 称要将公益做到老(图)"
+                    ]
+                }
+            },
+            "BatchCommonClassifyResponse": {
+                "title": "Root Type for BatchCommonClassifyResponse",
+                "description": "批量文本分类响应",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "label_list": {
+                        "description": "文本标签列表",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "label_list": [
+                        "体育",
+                        "娱乐"
+                    ]
+                }
+            },
+            "BatchMatchWordsRequest": {
+                "title": "Root Type for BatchMatchWordsRequest",
+                "description": "批量敏感词检测类型",
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "description": "文本列表",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "words": {
+                        "description": "敏感词列表",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "example": {
+                    "content": [
+                        "深蓝的天空中挂着一轮金黄的圆月，下面是海边的沙地，都种着一望无际的碧绿的西瓜。其间有一个十一二岁的少年，项带银圈，手捏一柄钢叉，向一匹猹尽力地刺去。那猹却将身一扭，反从他的胯下逃走了。这少年便是闰土。",
+                        "我认识他时，也不过十多岁，离现在将有三十年了；那时我的父亲还在世，家景也好，我正是一个少爷。他便对父亲说，可以叫他的儿子闰土来管祭器的。我的父亲允许了；我也很高兴，因为我早听到闰土这名字，而且知道他和我仿佛年纪，闰月生的，五行缺土，所以他的父亲叫他闰土"
+                    ],
+                    "words": [
+                        "闰土",
+                        "圆月"
+                    ]
+                }
+            },
+            "BatchMatchWordsResponse": {
+                "title": "Root Type for BatchMatchWordsResponse",
+                "description": "批量敏感词检测响应类型",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "word_locate": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "闰土": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "圆月": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "word_locate": [
+                        {
+                            "闰土": [
+                                "这少年便是闰土",
+                                "可以叫他的儿子闰土来管祭器的"
+                            ],
+                            "圆月": [
+                                "深蓝的天空中挂着一轮金黄的圆月"
+                            ]
+                        },
+                        {
+                            "闰土": [
+                                "因为我早听到闰土这名字",
+                                "所以他的父亲叫他闰土"
+                            ]
+                        }
+                    ]
+                }
+            },
+            "TextAbstractFmkwdRequest": {
+                "title": "Root Type for TextAbstractFmkwdRequest",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "content": "深蓝的天空中挂着一轮金黄的圆月，下面是海边的沙地，都种着一望无际的碧绿的西瓜。其间有一个十一二岁的少年，项带银圈，手捏一柄钢叉，向一匹猹尽力地刺去。那猹却将身一扭，反从他的胯下逃走了。这少年便是闰土。我认识他时，也不过十多岁，离现在将有三十年了；那时我的父亲还在世，家景也好，我正是一个少爷。他便对父亲说，可以叫他的儿子闰土来管祭器的。我的父亲允许了；我也很高兴，因为我早听到闰土这名字，而且知道他和我仿佛年纪，闰月生的，五行缺土，所以他的父亲叫他闰土"
+                }
+            },
+            "TextAbstractFmkwdResponse": {
+                "title": "Root Type for TextAbstractFmkwdResponse",
+                "description": "关键词最相关文本的上下文作为摘要",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "abstract": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "abstract": "我也很高兴，因为我早听到闰土这名字，而且知道他和我仿佛年纪，闰月生的，五行缺土，所以他的父亲叫他闰土"
+                }
+            },
+            "SingleFaceInfo": {
+                "title": "Root Type for SingleFaceInfo",
+                "description": "单个人脸信息",
+                "type": "object",
+                "properties": {
+                    "pos": {
+                        "type": "array",
+                        "items": {
+                            "format": "int32",
+                            "type": "integer"
+                        }
+                    },
+                    "confidence": {
+                        "format": "double",
+                        "type": "number"
+                    },
+                    "encoding": {
+                        "type": "array",
+                        "items": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                },
+                "example": {
+                    "pos": [
+                        100,
+                        200,
+                        32,
+                        36
+                    ],
+                    "confidence": 0.95,
+                    "encoding": [
+                        0.1,
+                        0.2,
+                        0.3,
+                        0.4
+                    ]
+                }
+            },
+            "FaceInfoResponse": {
+                "title": "Root Type for FaceEncodingsResponse",
+                "description": "返回人脸编码",
+                "required": [
+                    "bach_image_face_info"
+                ],
+                "type": "object",
+                "properties": {
+                    "bach_image_face_info": {
+                        "description": "每一幅图片的人脸信息。",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ImageFaceInfo"
+                        }
+                    },
+                    "status": {
+                        "description": "返回状态码",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "batch_image_face_info": [
+                        {
+                            "name": "1,jpg",
+                            "face_info_list": [
+                                {
+                                    "pos": [
+                                        100,
+                                        200,
+                                        32,
+                                        36
+                                    ],
+                                    "confidence": 0.95,
+                                    "encoding": [
+                                        0.1,
+                                        0.2
+                                    ]
+                                },
+                                {
+                                    "pos": [
+                                        100,
+                                        200,
+                                        32,
+                                        36
+                                    ],
+                                    "confidence": 0.95,
+                                    "encoding": [
+                                        0.1,
+                                        0.2
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "2.png",
+                            "face_info_list": [
+                                {
+                                    "pos": [
+                                        100,
+                                        200,
+                                        32,
+                                        36
+                                    ],
+                                    "confidence": 0.95,
+                                    "encoding": [
+                                        0.1,
+                                        0.2
+                                    ]
+                                },
+                                {
+                                    "pos": [
+                                        100,
+                                        200,
+                                        32,
+                                        36
+                                    ],
+                                    "confidence": 0.95,
+                                    "encoding": [
+                                        0.1,
+                                        0.2
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "ImageFaceInfo": {
+                "title": "Root Type for ImageFaceInfo",
+                "description": "一幅图片中所检测到的所有人脸的基本信息",
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "图片名称",
+                        "type": "string"
+                    },
+                    "face_info_list": {
+                        "description": "图片中包含的所有人脸的信息列表",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SingleFaceInfo"
+                        }
+                    }
+                },
+                "example": {
+                    "name": "1,jpg",
+                    "face_info_list": [
+                        {
+                            "pos": [
+                                100,
+                                200,
+                                32,
+                                36
+                            ],
+                            "confidence": 0.95,
+                            "encoding": [
+                                0.1,
+                                0.2
+                            ]
+                        }
+                    ]
+                }
+            },
+            "ImageRawData": {
+                "title": "Root Type for ImageRawData",
+                "description": "图片的原始数据",
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "图片的名称",
+                        "type": "string"
+                    },
+                    "base64": {
+                        "description": "图片的base64编码",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "name": "1.jpg",
+                    "base64": "base64of1.jpg"
+                }
+            },
+            "ImageBase64Data": {
+                "title": "Root Type for FaceEncodingsRequest",
+                "description": "上传一系列图片的base64编码列表。",
+                "type": "object",
+                "properties": {
+                    "batch_image_raw_data": {
+                        "description": "url: 图片的索引地址\nbase64: 图片的base64编码",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ImageRawData"
+                        },
+                        "properties": {
+                            "1.jpg": {
+                                "type": "string"
+                            },
+                            "2.png": {
+                                "type": "string"
+                            },
+                            "3.bmp": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "url": "gns://1.jpg",
+                    "base64": "abcdefg"
+                }
+            },
+            "FaceMetaData": {
+                "title": "Root Type for FaceMetaData",
+                "description": "图片中的人脸位置信息",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "人脸图片在数据库中的id",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "原图的路径",
+                        "type": "string"
+                    },
+                    "person_name": {
+                        "description": "人脸所属人物名称",
+                        "type": "string"
+                    },
+                    "_bottom": {
+                        "format": "int32",
+                        "description": "人脸图片底部坐标",
+                        "type": "integer"
+                    },
+                    "_left": {
+                        "format": "int32",
+                        "description": "人脸子图left坐标",
+                        "type": "integer"
+                    },
+                    "_right": {
+                        "format": "int32",
+                        "description": "right坐标",
+                        "type": "integer"
+                    },
+                    "_top": {
+                        "format": "int32",
+                        "description": "top坐标",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "face_id": 879631,
+                    "_left": 120,
+                    "_right": 250,
+                    "_top": 200,
+                    "_bottom": 350,
+                    "url": "gns://1.jpg",
+                    "person_name": "Jack"
+                }
+            },
+            "SimilarFaceRequest": {
+                "title": "Root Type for SimilarFaceRequest",
+                "description": "相似人脸查询请求",
+                "type": "object",
+                "properties": {
+                    "face_id": {
+                        "description": "人脸id",
+                        "type": "string"
+                    },
+                    "base64": {
+                        "description": "图片原始数据",
+                        "type": "string"
+                    },
+                    "top_k": {
+                        "description": "查找相似的人脸的数量",
+                        "type": "integer"
+                    }
+                },
+                "example": "{\n    \"face_id\": \"12345665432\",\n    \"base64\": \"abcdefg\"，\n    \"top_k\": 100\n}"
+            },
+            "FaceMetaDataGetResponse": {
+                "title": "Root Type for FaceMetaDataGetResponse",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "description": "状态码：0",
+                        "type": "integer"
+                    },
+                    "face_meta_data_list": {
+                        "description": "人脸元数据列表",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FaceMetaData"
+                        }
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "face_meta_data_list": [
+                        {
+                            "face_id": 12345,
+                            "_left": 100,
+                            "_right": 200,
+                            "_top": 200,
+                            "_bottom": 400,
+                            "url": "gns://1.jpg"
+                        }
+                    ]
+                }
+            },
+            "FaceMetaDataPostRequest": {
+                "title": "Root Type for AnalysisImageFaceInfoRequest",
+                "description": "分析单张图片中人脸信息的请求需要的数据类型",
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string"
+                    },
+                    "base64": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "url": "gns://1.jpg",
+                    "base64": "abcdefg"
+                }
+            },
+            "FaceMetaDataPostResponse": {
+                "title": "Root Type for ImageFaceAnalysisResponse",
+                "description": "人脸图片分析响应",
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string"
+                    },
+                    "face_id_list": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "example": {
+                    "url": "gns://1.jpg",
+                    "face_id_list": [
+                        1789,
+                        1790,
+                        1791,
+                        1792,
+                        1793
+                    ]
+                }
+            },
+            "Success": {
+                "title": "Root Type for PutSuccess",
+                "description": "更新资源成功",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "status": 0
+                }
+            },
+            "SimilarFaceResponse": {
+                "title": "Root Type for SimilarFaceResponse",
+                "description": "相似人脸搜索响应",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "description": "响应状态码：0",
+                        "type": "integer"
+                    },
+                    "similar_face_meta_data_list": {
+                        "description": "相似人脸元数据列表",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FaceMetaData"
+                        }
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "similar_face_meta_data_list": [
+                        {
+                            "face_id": 123,
+                            "url": "gns://1.jpg",
+                            "_top": 300,
+                            "_right": 200,
+                            "_bottom": 400
+                        }
+                    ]
+                }
+            },
+            "ImageEmbeddingPost": {
+                "title": "Root Type for imageEmbeddingPost",
+                "description": "向量化返回结果",
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string"
+                    },
+                    "base64": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "url": "gns://1.jpg",
+                    "image": "base64"
+                }
+            },
+            "ImageSearchGETSuc": {
+                "title": "Root Type for ImageSearchGETSuc",
+                "description": "搜索成功",
+                "required": [
+                    "image_list"
+                ],
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "description": "状态",
+                        "type": "string"
+                    },
+                    "message": {
+                        "description": "消息",
+                        "type": "string"
+                    },
+                    "image_list": {
+                        "$ref": "#/components/schemas/ImageSearchResultList",
+                        "description": "搜索结果列表",
+                        "properties": {
+                            "image_id": {
+                                "type": "string"
+                            },
+                            "image_url": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "status": "200",
+                    "message": "success",
+                    "image_list": {
+                        "image_id": "abcde",
+                        "image_url": "gns://1.jpg"
+                    }
+                }
+            },
+            "ImageSearchResultList": {
+                "title": "Root Type for ImageSearchResultList",
+                "description": "返回搜索到的图像信息",
+                "type": "object",
+                "properties": {
+                    "image_id": {
+                        "description": "图像的uuid",
+                        "type": "string"
+                    },
+                    "image_url": {
+                        "description": "图像的url",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "image_id": "abcd",
+                    "image_url": "gns://1.jpg"
+                }
+            },
+            "ImageSearchGETErr": {
+                "title": "Root Type for ImageSearchGETErr",
+                "description": "图像搜索失败",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "status": 400,
+                    "message": "搜索失败"
+                }
+            },
+            "ImageMetaDataList": {
+                "title": "Root Type for ImageMetaData",
+                "description": "搜索图像的子图的元数据列表",
+                "type": "object",
+                "properties": {
+                    "data_list": {
+                        "description": "元数据列表",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ImageMetaData"
+                        }
+                    },
+                    "status": {
+                        "description": "状态码",
+                        "type": "integer"
+                    },
+                    "message": {
+                        "description": "消息",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "data_list": [
+                    ]
+                }
+            },
+            "ImageMetaData": {
+                "title": "Root Type for ImageMetaData",
+                "description": "图像元数据",
+                "type": "object",
+                "properties": {
+                    "milvus_id": {
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "image_id": {
+                        "type": "string"
+                    },
+                    "left": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "right": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "top": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "bot": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "cls_name1": {
+                        "type": "string"
+                    },
+                    "cls_name2": {
+                        "type": "string"
+                    },
+                    "cls_name3": {
+                        "type": "string"
+                    },
+                    "cls_name4": {
+                        "type": "string"
+                    },
+                    "cls_name5": {
+                        "type": "string"
+                    },
+                    "cls_confidence1": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "cls_confidence2": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "cls_confidence3": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "cls_confidence4": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "cls_confidence5": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "det_name": {
+                        "type": "string"
+                    },
+                    "det_confidence": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "mask_path": {
+                        "type": "string"
+                    },
+                    "update_date": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "create_date": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "area": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "is_orig": {
+                        "format": "int32",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "milvus_id": "111111111111",
+                    "image_id": "aaaaaaaaaaa",
+                    "left": 0,
+                    "right": 0,
+                    "top": 0,
+                    "bot": 0,
+                    "cls_name1": "",
+                    "cls_name2": "",
+                    "cls_name3": "",
+                    "cls_name4": "",
+                    "cls_name5": "",
+                    "cls_confidence1": 0,
+                    "cls_confidence2": 0,
+                    "cls_confidence3": 0,
+                    "cls_confidence4": 0,
+                    "cls_confidence5": 0,
+                    "det_name": "",
+                    "det_confidence": 0,
+                    "url": "gns:/1.jpg",
+                    "mask_path": "mask/11111111111.jpg",
+                    "update_date": "20200428",
+                    "create_date": "20200428",
+                    "area": 0,
+                    "is_orig": 0
+                }
+            },
+            "ImagePost200": {
+                "title": "Root Type for ImagePost200",
+                "description": "图片上传成功",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "sub_img_list": {
+                        "description": "子图信息",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/sub_img_info"
+                        }
+                    },
+                    "class_name": {
+                        "description": "类别",
+                        "type": "array",
+                        "items": {
+
+                        }
+                    }
+                },
+                "example": "{\n    \"status\": \"200\",\n    \"message\": \"success\"，\n    \"sub_img_list\":{},\n    \"class_name\":{}\n}"
+            },
+            "SearchByImage": {
+                "title": "Root Type for SearchByImage",
+                "description": "使用原图搜索",
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string"
+                    },
+                    "topK": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "mask": {
+                        "format": "int32",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "url": "gns://1.jpg",
+                    "topK": 100,
+                    "mask": 0
+                }
+            },
+            "SearchImage": {
+                "title": "Root Type for SearchImage",
+                "description": "相似图片搜索",
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string"
+                    },
+                    "topK": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "mask": {
+                        "format": "int32",
+                        "type": "integer"
+                    }
+                },
+                "example": "{\n    \"url\": \"gns://1.jpg\",\n    \"topK\": 100,\n    \"mask\": 0,\n}"
+            },
+            "SearchImageBySeg": {
+                "title": "Root Type for SearchBySegImage",
+                "description": "搜索图像切片",
+                "type": "object",
+                "properties": {
+                    "image": {
+                        "type": "string"
+                    },
+                    "topK": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "mask": {
+                        "format": "int32",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "image": "base64.....",
+                    "topK": 100,
+                    "mask": 0
+                }
+            },
+            "sub_img_info": {
+                "title": "Root Type for sub_img_info",
+                "description": "子图信息",
+                "type": "object",
+                "properties": {
+                    "milvus_id": {
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "left": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "right": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "top": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "bot": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "cls_name": {
+                        "type": "array",
+                        "items": {
+
+                        }
+                    }
+                },
+                "example": {
+                    "milvus_id": "111111111111",
+                    "left": 0,
+                    "right": 0,
+                    "top": 0,
+                    "bot": 0,
+                    "cls_name": [
+                    ]
+                }
+            },
+            "SearchImageByMil": {
+                "title": "Root Type for SearchImageByMil",
+                "description": "通过milvus_id以图搜图",
+                "type": "object",
+                "properties": {
+                    "milvus_id": {
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "topK": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "mask": {
+                        "format": "int32",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "milvus_id": "11111111111111",
+                    "topK": 100,
+                    "mask": 0
+                }
+            },
+            "SearchImageByBase64": {
+                "title": "Root Type for SearchImageByBase64",
+                "description": "通过base64编码搜索相似图片",
+                "type": "object",
+                "properties": {
+                    "Image": {
+                        "type": "string"
+                    },
+                    "topK": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "mask": {
+                        "format": "int32",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "image": "base64...",
+                    "topK": 100,
+                    "mask": 0
+                }
+            },
+            "DocFingerprintResponse": {
+                "title": "Root Type for DocFingerprintResponse",
+                "description": "文档指纹生成接口响应",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "docufingerprint": {
+                        "type": "array",
+                        "items": {
+                            "format": "int32",
+                            "type": "integer"
+                        }
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "docufingerprint": [
+                        48563,
+                        38056,
+                        4108,
+                        25529,
+                        18446744073709552000
+                    ]
+                }
+            },
+            "DocFingerprintClusterRequest": {
+                "title": "Root Type for DocFingerprintClusterRequest",
+                "description": "利用文档指纹进行文本折叠",
+                "required": [
+                    "fingerprints"
+                ],
+                "type": "object",
+                "properties": {
+                    "fingerprints": {
+                        "$ref": "#/components/schemas/DocFingerprintClusterRequestFingerprints",
+                        "properties": {
+                            "text1": {
+                                "type": "array",
+                                "items": {
+                                    "format": "int32",
+                                    "type": "integer"
+                                }
+                            },
+                            "text2": {
+                                "type": "array",
+                                "items": {
+                                    "format": "int32",
+                                    "type": "integer"
+                                }
+                            },
+                            "text3": {
+                                "type": "array",
+                                "items": {
+                                    "format": "int32",
+                                    "type": "integer"
+                                }
+                            },
+                            "text4": {
+                                "type": "array",
+                                "items": {
+                                    "format": "int32",
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    },
+                    "grad": {
+                        "format": "int32",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "fingerprints": {
+                        "text1": [
+                            1245,
+                            5623,
+                            2536,
+                            236654,
+                            5568563
+                        ],
+                        "text2": [
+                            5689,
+                            153356,
+                            544854,
+                            15486,
+                            157489
+                        ],
+                        "text3": [
+                            4562,
+                            895623,
+                            215636,
+                            215464,
+                            1457896
+                        ],
+                        "text4": [
+                            1254575,
+                            157856,
+                            157854,
+                            457852,
+                            157554267
+                        ]
+                    },
+                    "grad": 3
+                }
+            },
+            "DocFingerprintClusterRequestFingerprints": {
+                "title": "Root Type for DocFingerprintClusterRequestFingerprints",
+                "description": "利用文档指纹进行文本折叠中文档指纹集合",
+                "type": "object",
+                "properties": {
+                    "text1": {
+                        "type": "array",
+                        "items": {
+                            "format": "int32",
+                            "type": "integer"
+                        }
+                    },
+                    "text2": {
+                        "type": "array",
+                        "items": {
+                            "format": "int32",
+                            "type": "integer"
+                        }
+                    },
+                    "text3": {
+                        "type": "array",
+                        "items": {
+                            "format": "int32",
+                            "type": "integer"
+                        }
+                    },
+                    "text4": {
+                        "type": "array",
+                        "items": {
+                            "format": "int32",
+                            "type": "integer"
+                        }
+                    }
+                },
+                "example": {
+                    "text1": [
+                        1245,
+                        5623,
+                        2536,
+                        236654,
+                        5568563
+                    ],
+                    "text2": [
+                        5689,
+                        153356,
+                        544854,
+                        15486,
+                        157489
+                    ],
+                    "text3": [
+                        4562,
+                        895623,
+                        215636,
+                        215464,
+                        1457896
+                    ],
+                    "text4": [
+                        1254575,
+                        157856,
+                        157854,
+                        457852,
+                        157554267
+                    ]
+                }
+            },
+            "FingerprintKeywordsRequest": {
+                "title": "Root Type for FingerprintKeywordsRequest",
+                "description": "文档指纹生成的关键词",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "fingerprint_keywords": {
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "status": 0,
+                    "fingerprint_keywords": [
+                        [
+                            "数学",
+                            0.7856
+                        ],
+                        [
+                            "学生",
+                            0.6589
+                        ]
+                    ]
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "隐私信息识别",
+            "description": ""
+        },
+        {
+            "name": "文本摘要",
+            "description": ""
+        },
+        {
+            "name": "文本关键词",
+            "description": ""
+        },
+        {
+            "name": "通用文本分类",
+            "description": ""
+        },
+        {
+            "name": "图像摘要标签",
+            "description": ""
+        },
+        {
+            "name": "文档指纹",
+            "description": ""
+        }
+    ]
+}

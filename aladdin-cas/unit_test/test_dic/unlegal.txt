@@ -1,0 +1,3 @@
+Word
+你好
+hello
